@@ -1,4 +1,6 @@
+#include "SDL.h"
 #include <SDL.h>
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
 
@@ -11,9 +13,12 @@ int main(int argc, char *argv[]) {
   SDL_Surface *bitmapSurface = NULL;
   SDL_bool loopShouldStop = SDL_FALSE;
 
+  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+    printf("Error on SDL_Init()");
+  }
 
-
-  win = SDL_CreateWindow("Hello World", posX, posY, width, height, 0);
+  win =
+      SDL_CreateWindow("Hello World", 300, 300, SCREEN_WIDTH, SCREEN_HEIGTH, 0);
 
   renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
