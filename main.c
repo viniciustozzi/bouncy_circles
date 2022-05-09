@@ -1,30 +1,29 @@
 #include "SDL.h"
-#include <SDL.h>
+#include "SDL_render.h"
+#include "SDL_video.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
 
   const int SCREEN_WIDTH = 640;
-  const int SCREEN_HEIGTH = 320;
+  const int SCREEN_HEIGTH = 420;
 
-  SDL_Window *win = NULL;
+  SDL_Window *windown = NULL;
   SDL_Renderer *renderer = NULL;
   SDL_Texture *bitmapTex = NULL;
-  SDL_Surface *bitmapSurface = NULL;
   SDL_bool loopShouldStop = SDL_FALSE;
 
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-    printf("Error on SDL_Init()");
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s",
+                 SDL_GetError());
   }
 
-  win =
-      SDL_CreateWindow("Hello World", 300, 300, SCREEN_WIDTH, SCREEN_HEIGTH, 0);
+  windown =
+      SDL_CreateWindow("Bouncy Circles", SDL_WINDOWPOS_CENTERED,
+                       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGTH, 0);
 
-  renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
-
-  bitmapSurface = SDL_LoadBMP("img/hello.bmp");
-  bitmapTex = SDL_CreateTextureFromSurface(renderer, bitmapSurface);
-  SDL_FreeSurface(bitmapSurface);
+  renderer = SDL_CreateRenderer(windown, -1, SDL_RENDERER_ACCELERATED);
 
   while (!loopShouldStop) {
     SDL_Event event;
@@ -36,16 +35,15 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, bitmapTex, NULL, NULL);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
     SDL_RenderPresent(renderer);
   }
 
   SDL_DestroyTexture(bitmapTex);
   SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(win);
+  SDL_DestroyWindow(windown);
 
   SDL_Quit();
 
-  return 0;
+  return (EXIT_SUCCESS);
 }
